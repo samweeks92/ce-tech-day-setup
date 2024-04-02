@@ -1,0 +1,12 @@
+.backups
+.vscode
+.env
+
+.terraform/**
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfvars
+terraform.tfvars.sample
+
+setup.sh
+setup.sh.bk
