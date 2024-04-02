@@ -47,6 +47,10 @@ resource "google_compute_network" "vpc" {
   project                 = var.project_id
   name                    = var.vpc-name
   auto_create_subnetworks = false
+
+  depends_on = [
+    google_project_service.enable-required-apis
+  ]
 }
 
 resource "google_compute_subnetwork" "subnet" {
@@ -56,4 +60,8 @@ resource "google_compute_subnetwork" "subnet" {
   region                   = var.region
   network                  = google_compute_network.vpc.id
   private_ip_google_access = true
+
+  depends_on = [
+    google_project_service.enable-required-apis
+  ]
 }
