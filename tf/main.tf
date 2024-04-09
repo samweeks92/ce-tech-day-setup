@@ -78,6 +78,12 @@ resource "google_project_iam_member" "notebook_bq_admin" {
   project = var.project_id
 }
 
+resource "google_project_iam_member" "act_as_sa" {
+  role    = "roles/iam.serviceAccounts.actAs"
+  member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
+  project = var.project_id
+}
+
 resource "google_project_iam_member" "notebook_bq_dataowner" {
   role    = "roles/bigquery.dataOwner"
   member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
@@ -126,7 +132,9 @@ resource "google_workbench_instance" "instance" {
       enable_vtpm = false
       enable_integrity_monitoring = false
     }
+
     disable_public_ip = true
+
     service_accounts {
       email = google_service_account.notebook_service_account.email
     }
@@ -136,13 +144,14 @@ resource "google_workbench_instance" "instance" {
       nic_type = "GVNIC"
     }
     metadata = {
-      terraform = "true"
+      proxy-mode = "service_account"
+      terraform  = true
     }
     enable_ip_forwarding = true
 
   }
 
-  disable_proxy_access = "true"
+  disable_proxy_access = "false"
 
   desired_state = "ACTIVE"
 
