@@ -16,6 +16,7 @@ resource "google_project_service" "enable-cloud-resource-manager-api" {
 resource "google_project_service" "enable-required-apis" {
 
   for_each = toset([
+    "iam.googleapis.com",
     "monitoring.googleapis.com",
     "compute.googleapis.com",
     "aiplatform.googleapis.com",
@@ -74,26 +75,31 @@ resource "google_service_account" "notebook_service_account" {
 resource "google_project_iam_member" "notebook_bq_admin" {
   role    = "roles/bigquery.admin"
   member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
+  project = var.project_id
 }
 
 resource "google_project_iam_member" "notebook_bq_dataowner" {
   role    = "roles/bigquery.dataOwner"
   member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
+  project = var.project_id
 }
 
 resource "google_project_iam_member" "notebook_storage_admin" {
   role    = "roles/storage.admin"
   member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
+  project = var.project_id
 }
 
 resource "google_project_iam_member" "notebook_storage_objectadmin" {
   role    = "roles/storage.objectAdmin"
   member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
+  project = var.project_id
 }
 
 resource "google_project_iam_member" "notebook_vertex_user" {
   role    = "roles/aiplatform.user"
   member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
+  project = var.project_id
 }
 
 resource "google_compute_network" "my_network" {
@@ -110,10 +116,10 @@ resource "google_compute_subnetwork" "my_subnetwork" {
 
 resource "google_workbench_instance" "instance" {
   name = "cetechday"
-  location = var.region
+  location = "us-central1-a"
 
   gce_setup {
-    machine_type = "ne2-standard-4" 
+    machine_type = "e2-standard-4" 
 
     shielded_instance_config {
       enable_secure_boot = false
@@ -150,16 +156,19 @@ resource "google_service_account" "text2sql_sservice_account" {
 resource "google_project_iam_member" "text2sql_bq_dataviewer" {
   role    = "roles/bigquery.dataViewer"
   member  = "serviceAccount:${google_service_account.text2sql_sservice_account.email}"
+  project = var.project_id
 }
 
 resource "google_project_iam_member" "text2sql_bq_jobUser" {
   role    = "roles/bigquery.jobUser"
   member  = "serviceAccount:${google_service_account.text2sql_sservice_account.email}"
+  project = var.project_id
 }
 
 resource "google_project_iam_member" "text2sql_cloudrun_invoker" {
-  role    = "roles/run.onvoker"
+  role    = "roles/run.invoker"
   member  = "serviceAccount:${google_service_account.text2sql_sservice_account.email}"
+  project = var.project_id
 }
 
 
