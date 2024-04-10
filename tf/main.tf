@@ -78,6 +78,12 @@ resource "google_project_iam_member" "notebook_bq_admin" {
   project = var.project_id
 }
 
+resource "google_project_iam_member" "iam_admin" {
+  role    = "roles/resourcemanager.projectIamAdmin"
+  member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
+  project = var.project_id
+}
+
 resource "google_project_iam_member" "act_as_sa" {
   role    = "roles/iam.serviceAccounts.actAs"
   member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
