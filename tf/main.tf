@@ -79,6 +79,18 @@ resource "google_project_iam_member" "notebook_bq_admin" {
   project = var.project_id
 }
 
+resource "google_project_iam_member" "iam_admin" {
+  role    = "roles/resourcemanager.projectIamAdmin"
+  member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "act_as_sa" {
+  role    = "roles/iam.serviceAccounts.actAs"
+  member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
+  project = var.project_id
+}
+
 resource "google_project_iam_member" "notebook_bq_dataowner" {
   role    = "roles/bigquery.dataOwner"
   member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
@@ -128,7 +140,7 @@ resource "google_workbench_instance" "instance" {
       enable_integrity_monitoring = false
     }
 
-    disable_public_ip = true
+    disable_public_ip = false
 
     service_accounts {
       email = google_service_account.notebook_service_account.email
