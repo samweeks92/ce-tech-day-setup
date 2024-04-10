@@ -139,7 +139,7 @@ resource "google_workbench_instance" "instance" {
       enable_integrity_monitoring = false
     }
 
-    disable_public_ip = true
+    disable_public_ip = false
 
     service_accounts {
       email = google_service_account.notebook_service_account.email
