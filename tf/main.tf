@@ -25,7 +25,8 @@ resource "google_project_service" "enable-required-apis" {
     "vpcaccess.googleapis.com",
     "notebooks.googleapis.com",
     "bigquery.googleapis.com",
-    "dataproc.googleapis.com"
+    "dataproc.googleapis.com",
+    "cloudaicompanion.googleapis.com"
   ])
   project = var.project_id
   service = each.value
