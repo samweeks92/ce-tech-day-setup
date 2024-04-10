@@ -25,7 +25,8 @@ resource "google_project_service" "enable-required-apis" {
     "vpcaccess.googleapis.com",
     "notebooks.googleapis.com",
     "bigquery.googleapis.com",
-    "dataproc.googleapis.com"
+    "dataproc.googleapis.com",
+    "cloudaicompanion.googleapis.com"
   ])
   project = var.project_id
   service = each.value
@@ -74,12 +75,6 @@ resource "google_service_account" "notebook_service_account" {
 
 resource "google_project_iam_member" "notebook_bq_admin" {
   role    = "roles/bigquery.admin"
-  member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
-  project = var.project_id
-}
-
-resource "google_project_iam_member" "act_as_sa" {
-  role    = "roles/iam.serviceAccounts.actAs"
   member  = "serviceAccount:${google_service_account.notebook_service_account.email}"
   project = var.project_id
 }
